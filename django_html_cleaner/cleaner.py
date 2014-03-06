@@ -53,7 +53,7 @@ class Cleaner:
         for el in find_empty_text_nodes(doc):
             el.getparent().tail = None
 
-        return tostring(doc, pretty_print=False, encoding="utf-8")
+        return tostring(doc, pretty_print=False, encoding="unicode")
 
     def sanitize_css(self, style):
         """Whitelist only the given styles."""

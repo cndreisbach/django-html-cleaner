@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.utils.encoding import smart_unicode
+from django.utils.encoding import smart_text
 from . import cleaner
 
 
@@ -13,7 +13,7 @@ class SanitizedCharField(models.CharField):
     def to_python(self, value):
         value = super(SanitizedCharField, self).to_python(value)
         value = self.cleaner(value)
-        return smart_unicode(value)
+        return smart_text(value)
 
 
 class SanitizedTextField(models.TextField):
@@ -25,7 +25,7 @@ class SanitizedTextField(models.TextField):
     def to_python(self, value):
         value = super(SanitizedTextField, self).to_python(value)
         value = self.cleaner(value)
-        return smart_unicode(value)
+        return smart_text(value)
 
     def get_prep_value(self, value):
         value = super(SanitizedTextField, self).get_prep_value(value)
