@@ -1,7 +1,6 @@
 # django-html-cleaner
 
-.. image:: https://travis-ci.org/cndreisbach/django-html-cleaner.png?branch=master
-    :target: https://travis-ci.org/cndreisbach/django-html-cleaner
+![travis image](https://travis-ci.org/cndreisbach/django-html-cleaner.png?branch=master)
 
 Django text and character fields that clean HTML input.
 
