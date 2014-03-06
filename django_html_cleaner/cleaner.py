@@ -6,7 +6,9 @@ import re
 find_styled_elements = etree.XPath("descendant-or-self::*[@style]")
 find_empty_text_nodes = etree.XPath("//text()[normalize-space()='']")
 
+
 class Cleaner:
+
     """
     Cleans HTML to remove offending tags, attributes, or styles.
     Takes the following attributes:
@@ -62,7 +64,7 @@ class Cleaner:
             """Check to see if property is in allowed styles.
                If allowed styles is not set, all properties are allowed."""
             return self.allowed_styles is None or \
-                   prop.lower() in self.allowed_styles
+                prop.lower() in self.allowed_styles
 
         # disallow all urls
         style = re.compile(r'url\s*\(\s*[^\s)]+?\s*\)\s*').sub(' ', style)
