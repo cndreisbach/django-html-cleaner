@@ -17,6 +17,7 @@ try:
             "django.contrib.contenttypes",
             "django.contrib.sites",
             "django_html_cleaner",
+            "tests",
         ],
         SITE_ID=1,
         NOSE_ARGS=['-s'],

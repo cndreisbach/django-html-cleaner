@@ -1,5 +1,5 @@
 from lxml import etree
-from lxml.html import tostring, fromstring
+from lxml.html import tostring, fromstring, fragment_fromstring
 from lxml.html.clean import Cleaner as LxmlCleaner
 import re
 
@@ -11,7 +11,7 @@ class Cleaner:
 
     """
     Cleans HTML to remove offending tags, attributes, or styles.
-    Takes the following attributes:
+    Takes the following arguments:
 
     ``allowed_tags``:
         If ``allowed_tags`` is not set, all valid HTML tags except ``script``
@@ -24,17 +24,21 @@ class Cleaner:
     ``allowed_styles``:
         If ``allowed_styles`` is not set, all styles are accepted.
 
+    ``create_parent``:
+        Specify a tag to wrap the HTML in before cleaning. If left False,
+        LXML will figure out what to do through black magic and fairy dust.
+
     JavaScript is _always_ removed.
     """
 
     def __init__(self, allowed_tags=None, allowed_attributes=None,
-                 allowed_styles=None, strip=False):
+                 allowed_styles=None, create_parent=False):
         self.allowed_tags = allowed_tags
         self.allowed_attributes = allowed_attributes
         self.allowed_styles = allowed_styles
-        self.strip = strip
+        self.create_parent = create_parent
 
-        remove_unknown_tags = allowed_tags is not None
+        remove_unknown_tags = allowed_tags is None
         safe_attrs_only = allowed_attributes is not None
 
         self.cleaner = LxmlCleaner(allow_tags=allowed_tags,
@@ -43,7 +47,11 @@ class Cleaner:
                                    safe_attrs=allowed_attributes)
 
     def __call__(self, html):
-        doc = fromstring(html)
+        if self.create_parent:
+            doc = fragment_fromstring(html, create_parent=self.create_parent)
+        else:
+            doc = fromstring(html)
+
         self.cleaner(doc)
 
         for el in find_styled_elements(doc):

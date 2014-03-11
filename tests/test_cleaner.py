@@ -28,15 +28,36 @@ class TestCleaner(unittest.TestCase):
         cleaner = Cleaner()
         html = """<p style="font-weight: bold; color: #333;">Hi there!</p>"""
         expected = html
-        cleaned_html = cleaner(html)
-        self.assertEqual(cleaned_html, expected)
+        self.assertEqual(expected, cleaner(html))
 
     def test_cleaner_can_eliminate_styles(self):
         cleaner = Cleaner(allowed_styles=['font-weight', 'text-decoration'])
         html = """<p style="font-weight: bold; color: #333;">Hi there!</p>"""
         expected = """<p style="font-weight: bold;">Hi there!</p>"""
-        cleaned_html = cleaner(html)
-        self.assertEqual(cleaned_html, expected)
+        self.assertEqual(expected, cleaner(html))
+
+    def test_cleaner_can_eliminate_specific_tags(self):
+        cleaner = Cleaner(allowed_tags=['p', 'strong', 'em'])
+        html = """<p onclick="alert()"><strong>Hello world!</strong></p>
+                  <p class="fool"><blink>How <tt>are</tt> you?</blink></p>
+                  <script src="/scripts/whoa.js"></script>"""
+        expected = """<div><p><strong>Hello world!</strong></p>""" \
+            """<p class="fool">How are you?</p></div>"""
+        self.assertEqual(expected, cleaner(html))
+
+    def test_cleaner_can_eliminate_specific_attributes(self):
+        cleaner = Cleaner(allowed_attributes=['class'])
+        html = """<p id="what-up" class="fool">How <tt>are</tt> you?</p>"""
+        expected = """<p class="fool">How <tt>are</tt> you?</p>"""
+        self.assertEqual(expected, cleaner(html))
+
+    def test_cleaner_can_wrap_in_specific_parent_tag(self):
+        cleaner = Cleaner(create_parent="section")
+        html = """<p onclick="alert()">Hello world!</p>
+                  <p>How are you?</p>
+                  <script src="/scripts/whoa.js"></script>"""
+        expected = "<section><p>Hello world!</p><p>How are you?</p></section>"
+        self.assertEqual(expected, cleaner(html))
 
     def tearDown(self):
         pass
