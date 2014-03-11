@@ -8,7 +8,7 @@ import sys
 import django_html_cleaner
 
 version = django_html_cleaner.__version__
-readme = open('README.md').read()
+readme = open('README.rst').read()
 
 # if sys.argv[-1] == 'publish':
 #     os.system('python setup.py sdist upload')
