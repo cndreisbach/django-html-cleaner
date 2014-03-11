@@ -4,10 +4,6 @@
 
 Django text and character fields that clean HTML input.
 
-## Documentation
-
-The full documentation is at https://django-html-cleaner.readthedocs.org.
-
 ## Quickstart
 
 Install django-html-cleaner:
@@ -22,9 +18,13 @@ Then enable it in a Django project by adding `django_html_cleaner` to your
 Then use it:
 
 ```python
-import django_html_cleaner
+from django_html_cleaner.models import SanitizedTextField
+
+# in a Django model
+
+field = SanitizedTextField()
 ```
 
-## Features
+## Documentation
 
-* TODO
+The full documentation is at https://django-html-cleaner.readthedocs.org.

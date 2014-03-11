@@ -28,7 +28,7 @@ class Cleaner:
         Specify a tag to wrap the HTML in before cleaning. If left False,
         LXML will figure out what to do through black magic and fairy dust.
 
-    JavaScript is _always_ removed.
+    JavaScript is *always* removed.
     """
 
     def __init__(self, allowed_tags=None, allowed_attributes=None,
@@ -46,7 +46,8 @@ class Cleaner:
                                    safe_attrs_only=safe_attrs_only,
                                    safe_attrs=allowed_attributes)
 
-    def __call__(self, html):
+    def clean(self, html):
+        """Clean the given HTML."""
         if self.create_parent:
             doc = fragment_fromstring(html, create_parent=self.create_parent)
         else:
