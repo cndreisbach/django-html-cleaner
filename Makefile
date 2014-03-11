@@ -22,7 +22,7 @@ clean-pyc:
 	find . -name '*~' -exec rm -f {} +
 
 lint:
-	flake8 htmlcleaner tests
+	flake8 django_html_cleaner tests
 
 test:
 	python runtests.py
