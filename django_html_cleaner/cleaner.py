@@ -57,7 +57,7 @@ class Cleaner:
 
         for el in find_styled_elements(doc):
             old_style = el.get('style')
-            new_style = self.sanitize_css(old_style)
+            new_style = self.sanitize_style_value(old_style)
             if old_style != new_style:
                 el.set('style', new_style)
 
@@ -66,9 +66,7 @@ class Cleaner:
 
         return tostring(doc, pretty_print=False, encoding="unicode")
 
-    def sanitize_css(self, style):
-        """Whitelist only the given styles."""
-
+    def sanitize_style_value(self, style):
         def is_property_allowed(prop):
             """Check to see if property is in allowed styles.
                If allowed styles is not set, all properties are allowed."""
