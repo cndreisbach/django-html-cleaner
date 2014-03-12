@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from distutils.core import setup
+from setuptools import setup, find_packages
 
 import os
 import sys
@@ -20,11 +20,15 @@ readme = open('README.rst').read()
 setup(
     name='django-html-cleaner',
     version=version,
-    packages=['django_html_cleaner'],
+    packages=find_packages(),
+    package_data={'': ['*.rst', '*.md', '*.txt']},
+    # packages=['django_html_cleaner'],
     description="""Django text and character fields that clean HTML input.""",
     license="Public Domain / CC0",
     long_description=readme,
     author='Clinton Dreisbach',
     author_email='clinton.dreisbach@cfpb.gov',
     url='https://github.com/cndreisbach/django-html-cleaner',
+    install_requires=['lxml>=3.3.3',
+                      'django']
 )

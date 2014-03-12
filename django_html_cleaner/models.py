@@ -33,10 +33,12 @@ class SanitizedCharField(models.CharField):
 
     def pre_save(self, model_instance, add):
         value = super(SanitizedCharField, self).pre_save(model_instance, add)
-        clean_value = self.cleaner.clean(value)
-        if value != clean_value:
-            setattr(model_instance, self.attname, clean_value)
-        return clean_value
+        if value is not None:
+            clean_value = self.cleaner.clean(value)
+            if value != clean_value:
+                setattr(model_instance, self.attname, clean_value)
+            value = clean_value
+        return value
 
 
 class SanitizedTextField(models.TextField):
@@ -55,10 +57,12 @@ class SanitizedTextField(models.TextField):
 
     def pre_save(self, model_instance, add):
         value = super(SanitizedTextField, self).pre_save(model_instance, add)
-        clean_value = self.cleaner.clean(value)
-        if value != clean_value:
-            setattr(model_instance, self.attname, clean_value)
-        return clean_value
+        if value is not None:
+            clean_value = self.cleaner.clean(value)
+            if value != clean_value:
+                setattr(model_instance, self.attname, clean_value)
+            value = clean_value
+        return value
 
 
 if 'south' in settings.INSTALLED_APPS:
