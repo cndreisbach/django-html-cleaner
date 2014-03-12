@@ -23,6 +23,33 @@ Then use it::
     # in a Django model
     field = SanitizedTextField()
 
+Django settings
+---------------
+``SanitizedCharField`` and ``SanitizedTextField`` can take an instance of
+``django_html_cleaner.cleaner.Cleaner`` to set up how they will clean HTML
+on save.
+
+An alternative way to set this up is to use your Django settings. In
+``django.conf.settings``, you can use the following settings to set up
+django-html-cleaner's behavior::
+
+    ``HTML_CLEANER_ALLOWED_TAGS``:
+      A list of tags that will be allowed. If not set, all tags
+      that are known HTML tags and are not special (``script``, ``html``, etc)
+      will be allowed.
+
+    ``HTML_CLEANER_ALLOWED_ATTRIBUTES``:
+      A list of attributes that will be allowed. If not set, all attributes
+      that are not JavaScript-related (``onclick``, for example) will be
+      allowed.
+
+    ``HTML_CLEANER_ALLOWED_STYLES``:
+      A list of styles that will be allowed. If not set, all styles are
+      allowed.
+
+    ``HTML_CLEANER_PARENT_TAG``:
+      If set to a tag name, all input will be wrapped in this parent tag.
+
 Classes
 -------
 

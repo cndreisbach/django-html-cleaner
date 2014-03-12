@@ -1,7 +1,20 @@
 from django.conf import settings
 from django.db import models
-from django.utils.encoding import smart_text
 from .cleaner import Cleaner
+
+
+def default_cleaner():
+    allowed_tags = getattr(settings, 'HTML_CLEANER_ALLOWED_TAGS', None)
+    allowed_attributes = getattr(settings,
+                                 'HTML_CLEANER_ALLOWED_ATTRIBUTES',
+                                 None)
+    allowed_styles = getattr(settings, 'HTML_CLEANER_ALLOWED_STYLES', None)
+    create_parent = getattr(settings, 'HTML_CLEANER_PARENT_TAG', None)
+
+    return Cleaner(allowed_tags=allowed_tags,
+                   allowed_attributes=allowed_attributes,
+                   allowed_styles=allowed_styles,
+                   create_parent=create_parent)
 
 
 class SanitizedCharField(models.CharField):
@@ -15,13 +28,15 @@ class SanitizedCharField(models.CharField):
     """
 
     def __init__(self, cleaner=None, *args, **kwargs):
-        self.cleaner = cleaner or Cleaner()
+        self.cleaner = cleaner or default_cleaner()
         super(SanitizedCharField, self).__init__(*args, **kwargs)
 
-    def to_python(self, value):
-        value = super(SanitizedCharField, self).to_python(value)
-        value = self.cleaner.clean(value)
-        return smart_text(value)
+    def pre_save(self, model_instance, add):
+        value = super(SanitizedCharField, self).pre_save(model_instance, add)
+        clean_value = self.cleaner.clean(value)
+        if value != clean_value:
+            setattr(model_instance, self.attname, clean_value)
+        return clean_value
 
 
 class SanitizedTextField(models.TextField):
@@ -35,18 +50,15 @@ class SanitizedTextField(models.TextField):
     """
 
     def __init__(self, cleaner=None, *args, **kwargs):
-        self.cleaner = cleaner or Cleaner()
+        self.cleaner = cleaner or default_cleaner()
         super(SanitizedTextField, self).__init__(*args, **kwargs)
 
-    def to_python(self, value):
-        value = super(SanitizedTextField, self).to_python(value)
-        value = self.cleaner.clean(value)
-        return smart_text(value)
-
-    def get_prep_value(self, value):
-        value = super(SanitizedTextField, self).get_prep_value(value)
-        value = self.cleaner.clean(value)
-        return value
+    def pre_save(self, model_instance, add):
+        value = super(SanitizedTextField, self).pre_save(model_instance, add)
+        clean_value = self.cleaner.clean(value)
+        if value != clean_value:
+            setattr(model_instance, self.attname, clean_value)
+        return clean_value
 
 
 if 'south' in settings.INSTALLED_APPS:
