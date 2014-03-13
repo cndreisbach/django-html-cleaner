@@ -36,5 +36,19 @@ class TestHtmlcleaner(unittest.TestCase):
         post = Post.objects.get(id=1)
         self.assertEqual(expected, post.body)
 
+    def test_model_value_updated_on_save(self):
+        body = """<p onclick="alert()">Hello world!</p>
+                  <p>How are you?</p>
+                  <script src="/scripts/whoa.js"></script>"""
+        post = Post.objects.create(
+            id=1,
+            title="Super title",
+            body=body)
+        expected = "<div><p>Hello world!</p><p>How are you?</p></div>"
+
+        # Note that unlike the tests above, we do not get the post back
+        # from the DB.
+        self.assertEqual(expected, post.body)
+
     def tearDown(self):
         Post.objects.all().delete()
