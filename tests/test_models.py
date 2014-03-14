@@ -7,8 +7,12 @@ class TestHtmlcleaner(unittest.TestCase):
     def setUp(self):
         pass
 
-    def test_blank_field_does_not_explode(self):
+    def test_none_field_does_not_explode(self):
         post = Post.objects.create(id=1,title="Hi")
+        self.assert_(Post.objects.get(id=1))
+
+    def test_blank_field_does_not_explode(self):
+        post = Post.objects.create(id=1,title="Hi",body="")
         self.assert_(Post.objects.get(id=1))
 
     def test_char_field_works(self):

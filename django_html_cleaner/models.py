@@ -33,7 +33,7 @@ class SanitizedCharField(models.CharField):
 
     def pre_save(self, model_instance, add):
         value = super(SanitizedCharField, self).pre_save(model_instance, add)
-        if value is not None:
+        if value and value.strip():
             clean_value = self.cleaner.clean(value)
             if value != clean_value:
                 setattr(model_instance, self.attname, clean_value)
@@ -57,7 +57,7 @@ class SanitizedTextField(models.TextField):
 
     def pre_save(self, model_instance, add):
         value = super(SanitizedTextField, self).pre_save(model_instance, add)
-        if value is not None:
+        if value and value.strip():
             clean_value = self.cleaner.clean(value)
             if value != clean_value:
                 setattr(model_instance, self.attname, clean_value)
