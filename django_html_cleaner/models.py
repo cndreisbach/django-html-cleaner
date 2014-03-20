@@ -67,5 +67,21 @@ class SanitizedTextField(models.TextField):
 
 if 'south' in settings.INSTALLED_APPS:
     from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^sanitizer\.models\.SanitizedCharField"])
-    add_introspection_rules([], ["^sanitizer\.models\.SanitizedTextField"])
+    add_introspection_rules([
+        (
+            [SanitizedCharField],
+            [],
+            {
+                "cleaner": ["cleaner", {}]
+            },
+        ),
+    ], ["^django_html_cleaner\.models\.SanitizedCharField"])
+    add_introspection_rules([
+        (
+            [SanitizedTextField],
+            [],
+            {
+                "cleaner": ["cleaner", {}]
+                    },
+            ),
+    ], ["^django_html_cleaner\.models\.SanitizedTextField"])
